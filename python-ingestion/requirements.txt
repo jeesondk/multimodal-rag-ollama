@@ -1,0 +1,9 @@
+# Core dependencies
+ollama>=0.6.1
+psycopg2-binary>=2.9.11
+pgvector>=0.4.2
+pillow>=12.0.0
+pypdf>=6.5.0
+python-magic>=0.4.27
+python-dotenv>=1.2.1
+numpy>=2.4.0
