@@ -17,7 +17,7 @@ public class OllamaService
         _baseUrl = _config["Ollama:BaseUrl"] ?? "http://localhost:11434";
     }
 
-    public async Task<float[]> GetEmbeddingAsync(string text, string? model = null)
+    public virtual async Task<float[]> GetEmbeddingAsync(string text, string? model = null)
     {
         model ??= _config["Ollama:EmbeddingModel"];
 
@@ -42,7 +42,7 @@ public class OllamaService
         }
     }
 
-    public async Task<string> GenerateAsync(string prompt, string? model = null)
+    public virtual async Task<string> GenerateAsync(string prompt, string? model = null)
     {
         model ??= _config["Ollama:TextModel"];
 

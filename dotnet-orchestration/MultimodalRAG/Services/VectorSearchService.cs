@@ -16,7 +16,7 @@ public class VectorSearchService
         _logger = logger;
     }
 
-    public async Task<List<SearchResult>> SearchAsync(float[] queryEmbedding, int topK = 5, string? contentType = null)
+    public virtual async Task<List<SearchResult>> SearchAsync(float[] queryEmbedding, int topK = 5, string? contentType = null)
     {
         await using var conn = new NpgsqlConnection(_connectionString);
         await conn.OpenAsync();

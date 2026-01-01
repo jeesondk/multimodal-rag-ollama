@@ -1,6 +1,6 @@
 import os
 from typing import Optional
-from embedders import TextEmbedder
+from embedders import TextEmbedder, ImageEmbedder
 from processors import TextProcessor, ImageProcessor, PDFProcessor
 from database import Database
 import logging
@@ -18,7 +18,7 @@ class MultimodalIngestion:
         self.pdf_processor = PDFProcessor()
 
     def ingest_text(self, text: str, metadata: Optional[dict] = None):
-        """Ingress plain text"""
+        """Ingest plain text"""
         # Clean text
         cleaned = self.text_processor.clean(text)
 
@@ -34,7 +34,7 @@ class MultimodalIngestion:
 
             doc_id = self.db.insert_document(
                 content = chunk,
-                embedding = embedding.toList(),
+                embedding = embedding.tolist(),
                 content_type = 'text',
                 metadata = chunk_metadata
             )
@@ -77,7 +77,7 @@ class MultimodalIngestion:
         pages = self.pdf_processor.extract_pages(pdf_path)
 
         for page in pages:
-            text = self.text_processor.clean_text(page['text'])
+            text = self.text_processor.clean(page['text'])
 
             if not text.strip():
                 continue
