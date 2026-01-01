@@ -56,11 +56,15 @@ app.UseCors("AllowAll");
 // Map all endpoints
 app.MapAllEndpoints();
 
-// Log startup information
-var logger = app.Services.GetRequiredService<ILogger<Program>>();
-logger.LogInformation("🚀 Multimodal RAG API started");
-logger.LogInformation("📚 Swagger UI available at: {Url}", 
-    app.Environment.IsDevelopment() ? "http://localhost:5000" : "disabled");
-logger.LogInformation("🔗 API endpoints available at: /api/rag/*");
+// Log startup information after server starts
+app.Lifetime.ApplicationStarted.Register(() =>
+{
+    var logger = app.Services.GetRequiredService<ILogger<Program>>();
+    var addresses = app.Urls;
+    logger.LogInformation("🚀 Multimodal RAG API started");
+    logger.LogInformation("📚 Swagger UI available at: {Url}",
+        app.Environment.IsDevelopment() ? string.Join(", ", addresses) : "disabled");
+    logger.LogInformation("🔗 API endpoints available at: /api/rag/*");
+});
 
 app.Run();

@@ -11,9 +11,9 @@ fi
 
 # Pull required models
 echo "📥 Pulling Ollama models..."
-ollama pull nomic-embed-text
+ollama pull nomic-embed-text:v1.5
 ollama pull qwen2.5:14b
-ollama pull qwen2.5-vl:7b
+ollama pull qwen2.5vl:7b
 
 # Start database
 echo "🐘 Starting PostgreSQL with PGVector..."

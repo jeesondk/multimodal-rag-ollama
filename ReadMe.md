@@ -75,6 +75,25 @@ Access at http://localhost:3000
 
 Edit `.env` for Python settings and `appsettings.json` for .NET settings.
 
+.ENV File
+```bash
+# Database Configuration
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=multimodal_rag
+DB_USER=raguser
+DB_PASSWORD=ragpassword
+
+# Ollama Configuration
+OLLAMA_HOST=http://localhost:11434
+EMBEDDING_MODEL=nomic-embed-text
+VISION_MODEL=qwen2.5-vl:7b
+TEXT_MODEL=qwen2.5:14b
+
+# Vector Dimension (nomic-embed-text uses 768)
+VECTOR_DIMENSION=768
+```
+
 ## API Endpoints (Minimal API)
 
 ### Query & Search
