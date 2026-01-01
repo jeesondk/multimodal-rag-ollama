@@ -1,0 +1,103 @@
+# ============================================
+# .NET
+# ============================================
+[Dd]ebug/
+[Rr]elease/
+[Bb]in/
+[Oo]bj/
+*.user
+*.suo
+*.cache
+.vs/
+
+# ============================================
+# Python
+# ============================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+
+# Virtual environments
+venv/
+.venv/
+env/
+ENV/
+
+# ============================================
+# JetBrains IDEs
+# ============================================
+.idea/**/workspace.xml
+.idea/**/tasks.xml
+.idea/**/usage.statistics.xml
+.idea/**/dictionaries
+.idea/**/shelf
+.idea/**/contentModel.xml
+.idea/**/dataSources/
+.idea/**/dataSources.ids
+.idea/**/dataSources.local.xml
+.idea/**/sqlDataSources.xml
+.idea/**/dynamic.xml
+.idea/**/uiDesigner.xml
+.idea/**/dbnavigator.xml
+.idea/**/mongoSettings.xml
+*.iws
+.idea_modules/
+
+# ============================================
+# Environment & Secrets
+# ============================================
+.env
+*.env
+!.env.template
+
+# ============================================
+# OS
+# ============================================
+.DS_Store
+.AppleDouble
+.LSOverride
+Thumbs.db
+*.stackdump
+
+# ============================================
+# Database
+# ============================================
+*.sql
+*.dump
+*.backup
+*.db
+*.sqlite
+*.sqlite3
+
+# ============================================
+# Docker volumes
+# ============================================
+pgvector_data/
+open-webui-data/
+
+# ============================================
+# Logs & temp files
+# ============================================
+*.log
+logs/
+temp/
+tmp/
+
+# ============================================
+# Project specific
+# ============================================
+# Keep test scripts but ignore results
+test-results/
+.pytest_cache/
+.coverage
+
+# Large model files
+*.bin
+*.pt
+*.pth
+*.onnx

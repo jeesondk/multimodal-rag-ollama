@@ -1,0 +1,61 @@
+@baseUrl = http://localhost:5000/api/rag
+
+### Health Check
+GET {{baseUrl}}/health
+
+### Get Statistics
+GET {{baseUrl}}/stats
+
+### Test Embedding
+POST {{baseUrl}}/embed
+Content-Type: application/json
+
+{
+  "text": "What is artificial intelligence?"
+}
+
+### Search Documents
+POST {{baseUrl}}/search
+Content-Type: application/json
+
+{
+  "query": "machine learning",
+  "topK": 5
+}
+
+### Search Documents by Type
+POST {{baseUrl}}/search
+Content-Type: application/json
+
+{
+  "query": "neural networks",
+  "topK": 3,
+  "contentType": "pdf"
+}
+
+### Full RAG Query
+POST {{baseUrl}}/query
+Content-Type: application/json
+
+{
+  "query": "Explain machine learning in simple terms",
+  "topK": 5
+}
+
+### RAG Query with Content Type Filter
+POST {{baseUrl}}/query
+Content-Type: application/json
+
+{
+  "query": "What are the key concepts?",
+  "topK": 3,
+  "contentType": "text"
+}
+
+### Test Generation (direct)
+POST {{baseUrl}}/generate
+Content-Type: application/json
+
+{
+  "prompt": "Explain quantum computing in one sentence"
+}
