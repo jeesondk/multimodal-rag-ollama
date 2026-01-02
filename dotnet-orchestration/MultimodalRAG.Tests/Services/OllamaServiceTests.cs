@@ -25,8 +25,8 @@ public class OllamaServiceTests
 
         // Setup configuration
         _configurationMock["Ollama:BaseUrl"].Returns("http://localhost:11434");
-        _configurationMock["Ollama:EmbeddingModel"].Returns("nomic-embed-text");
-        _configurationMock["Ollama:TextModel"].Returns("qwen2.5:14b");
+        _configurationMock["Ollama:EmbeddingModel"].Returns("nomic-embed-text:v1.5");
+        _configurationMock["Ollama:TextModel"].Returns("qwen2.5-coder:14b");
     }
 
     private class TestHttpMessageHandler : HttpMessageHandler
@@ -48,7 +48,7 @@ public class OllamaServiceTests
     {
         // Arrange
         var expectedEmbedding = new float[] { 0.1f, 0.2f, 0.3f };
-        var response = new OllamaEmbeddingResponse { Embedding = expectedEmbedding };
+        var response = new OllamaEmbeddingResponse { Embeddings = new[] { expectedEmbedding } };
 
         _httpMessageHandler.SendAsyncFunc = (request, cancellationToken) =>
             Task.FromResult(new HttpResponseMessage
