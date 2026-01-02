@@ -2,6 +2,13 @@
 
 Full-stack RAG (Retrieval-Augmented Generation) system with Python ingestion, .NET orchestration, Open WebUI Pipelines, and Ollama local models.
 
+> **Built with:**
+> - [Open WebUI](https://github.com/open-webui/open-webui) - User-friendly interface for LLMs
+> - [Ollama](https://ollama.com/) - Local LLM runtime for privacy-focused AI
+> - [Claude.ai](https://claude.ai/) - Solution architecture and implementation assistance
+> - PGVector - PostgreSQL extension for vector similarity search
+> - .NET & Python - Backend orchestration and document processing
+
 ## Table of Contents
 - [Architecture Overview](#architecture-overview)
 - [Prerequisites](#prerequisites)
@@ -787,13 +794,77 @@ TIMEOUT: int = Field(
 
 ---
 
+## Acknowledgments
+
+This solution was built using the following open-source and commercial technologies:
+
+### Core Technologies
+- **[Open WebUI](https://github.com/open-webui/open-webui)** - Extensible, feature-rich web interface for LLMs with support for pipelines and functions. Licensed under MIT.
+- **[Ollama](https://ollama.com/)** - Run large language models locally with ease. Enables privacy-focused AI without cloud dependencies.
+- **[PGVector](https://github.com/pgvector/pgvector)** - Open-source vector similarity search extension for PostgreSQL.
+
+### Development & Architecture
+- **[Claude.ai](https://claude.ai/)** by Anthropic - AI assistant used for solution architecture, implementation guidance, and documentation. This project benefited from Claude's expertise in system design, code structure, and technical documentation.
+
+### Models
+- **Qwen 2.5** by Alibaba Cloud - High-performance open-source language models
+- **Nomic Embed Text** - Open-source embedding model optimized for semantic search
+
+### Special Thanks
+- Open WebUI community for the excellent pipelines framework
+- Ollama team for making local LLM deployment accessible
+- Anthropic for Claude.ai's architectural and coding assistance
+
+---
+
 ## License
 
-[Your License]
+This project is provided as-is with no restrictions on use, modification, or distribution. Feel free to use, adapt, and build upon this solution for any purpose, commercial or non-commercial.
+
+### Component Licenses
+
+Please note that this solution integrates various open-source and proprietary components, each with their own licenses:
+
+- **Open WebUI**: MIT License
+- **Ollama**: MIT License
+- **PGVector**: PostgreSQL License (similar to MIT/BSD)
+- **.NET**: MIT License
+- **Python Libraries**: Various open-source licenses (see `requirements.txt`)
+- **Qwen Models**: Apache 2.0 License
+- **Nomic Embed**: Apache 2.0 License
+
+When using this solution, ensure you comply with the licenses of the individual components.
+
+### Attribution
+
+While not required, attribution is appreciated. If you use this solution in your work, consider mentioning:
+- This repository and its contributors
+- The technologies listed in the Acknowledgments section
 
 ## Contributing
 
-[Your contribution guidelines]
+Contributions are welcome! This project was built with the goal of being a practical, production-ready RAG solution.
+
+### How to Contribute
+
+1. **Bug Reports**: Open an issue describing the bug and steps to reproduce
+2. **Feature Requests**: Share your ideas for improvements or new features
+3. **Code Contributions**:
+   - Fork the repository
+   - Create a feature branch
+   - Make your changes with clear commit messages
+   - Submit a pull request with a description of your changes
+
+### Areas for Contribution
+
+- Additional document processors (Word, Excel, etc.)
+- Performance optimizations
+- Additional pipeline configurations
+- Enhanced error handling and monitoring
+- Documentation improvements
+- Test coverage expansion
+
+All contributions will be reviewed and acknowledged.
 
 ## Support
 
