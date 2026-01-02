@@ -17,6 +17,21 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - rag-network
+
+  pipelines:
+    image: ghcr.io/open-webui/pipelines:main
+    container_name: pipelines
+    ports:
+      - "9099:9099"
+    volumes:
+      - ./open-webui-pipeline:/app/pipelines
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - rag-network
+    restart: always
 
   open-webui:
     image: ghcr.io/open-webui/open-webui:main
@@ -26,9 +41,25 @@ services:
     volumes:
       - open-webui-data:/app/backend/data
     environment:
+      # Ollama connection
       - OLLAMA_BASE_URL=http://host.docker.internal:11434
+
+      # Disable built-in RAG to use our custom one
+      - ENABLE_RAG_WEB_SEARCH=false
+
+      # Optional: Disable auth for local development
+      - WEBUI_AUTH=true
     extra_hosts:
       - "host.docker.internal:host-gateway"
+    networks:
+      - rag-network
+    depends_on:
+      pgvector:
+        condition: service_healthy
+
+networks:
+  rag-network:
+    driver: bridge
 
 volumes:
   pgvector_data:

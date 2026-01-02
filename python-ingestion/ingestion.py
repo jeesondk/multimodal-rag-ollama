@@ -20,7 +20,7 @@ class MultimodalIngestion:
     def ingest_text(self, text: str, metadata: Optional[dict] = None):
         """Ingest plain text"""
         # Clean text
-        cleaned = self.text_processor.clean(text)
+        cleaned = self.text_processor.clean_text(text)
 
         # Chunk if text is long
         chunks = self.text_processor.chunk_text(cleaned)
@@ -73,36 +73,90 @@ class MultimodalIngestion:
         logger.info(f"Inserted image: {image_path}, doc_id: {doc_id}")
 
     def ingest_pdf(self, pdf_path: str, metadata: Optional[dict] = None):
-        """Ingest PDF by extracting and chunking text from each page"""
+        """Ingest PDF by extracting multimodal content from each page"""
         pages = self.pdf_processor.extract_pages(pdf_path)
 
         for page in pages:
-            text = self.text_processor.clean(page['text'])
+            page_num = page['page_number']
+            total_pages = page['metadata']['total_pages']
 
-            if not text.strip():
-                continue
+            # 1. Process text content
+            text = self.text_processor.clean_text(page['text'])
+            if text.strip():
+                chunks = self.text_processor.chunk_text(text)
 
-            # Chunk page text
-            chunks = self.text_processor.chunk_text(text)
+                for i, chunk in enumerate(chunks):
+                    embedding = self.text_embedder.embed_single(chunk)
 
-            for i, chunk in enumerate(chunks):
-                embedding = self.text_embedder.embed_single(chunk)
+                    chunk_metadata = metadata.copy() if metadata else {}
+                    chunk_metadata['pdf_path'] = pdf_path
+                    chunk_metadata['page_number'] = page_num
+                    chunk_metadata['chunk_index'] = i
+                    chunk_metadata['total_chunks'] = len(chunks)
+                    chunk_metadata['total_pages'] = total_pages
+                    chunk_metadata['content_subtype'] = 'text'
 
-                chunk_metadata = metadata.copy() if metadata else {}
-                chunk_metadata['pdf_path'] = pdf_path
-                chunk_metadata['page_number'] = page['page_number']
-                chunk_metadata['chunk_index'] = i
-                chunk_metadata['total_chunks'] = len(chunks)
-                chunk_metadata['total_pages'] = page['metadata']['total_pages']
+                    doc_id = self.db.insert_document(
+                        content=chunk,
+                        embedding=embedding.tolist(),
+                        content_type='pdf',
+                        metadata=chunk_metadata
+                    )
 
-                doc_id = self.db.insert_document(
-                    content=chunk,
-                    embedding=embedding.tolist(),
-                    content_type='pdf',
-                    metadata=chunk_metadata
-                )
+                logger.info(f"Ingested {len(chunks)} text chunks from page {page_num}/{total_pages}")
 
-            logger.info(f"Inserted PDF page {page['page_number']}/{page['metadata']['total_pages']}, doc_id: {doc_id}")
+            # 2. Process extracted images
+            for img_data in page['images']:
+                try:
+                    # Use vision model to describe the image
+                    description = self.image_embedder.describe_image(img_data['image_path'])
+                    logger.info(f"Image description (page {page_num}, img {img_data['image_index']}): {description[:100]}...")
+
+                    # Embed the description
+                    embedding = self.text_embedder.embed_single(description)
+
+                    img_metadata = metadata.copy() if metadata else {}
+                    img_metadata['pdf_path'] = pdf_path
+                    img_metadata['page_number'] = page_num
+                    img_metadata['total_pages'] = total_pages
+                    img_metadata['content_subtype'] = 'image'
+                    img_metadata['image_index'] = img_data['image_index']
+                    img_metadata['image_size'] = img_data['size']
+                    img_metadata['image_format'] = img_data['format']
+                    img_metadata['description'] = description
+
+                    doc_id = self.db.insert_document(
+                        content=description,
+                        embedding=embedding.tolist(),
+                        content_type='pdf',
+                        metadata=img_metadata
+                    )
+
+                    logger.info(f"Ingested image from page {page_num}/{total_pages}, doc_id: {doc_id}")
+
+                except Exception as e:
+                    logger.error(f"Failed to process image on page {page_num}: {e}")
+
+            # 3. Process detected tables
+            for table_idx, table in enumerate(page['tables']):
+                try:
+                    # For tables, we store metadata about their location
+                    # The text content should already be captured in the text chunks above
+                    table_metadata = metadata.copy() if metadata else {}
+                    table_metadata['pdf_path'] = pdf_path
+                    table_metadata['page_number'] = page_num
+                    table_metadata['total_pages'] = total_pages
+                    table_metadata['content_subtype'] = 'table'
+                    table_metadata['table_index'] = table_idx
+                    table_metadata['table_bbox'] = table['bbox']
+                    table_metadata['table_confidence'] = table['confidence']
+
+                    # We could extract text from the table region specifically
+                    # For now, just log that we detected it
+                    logger.info(f"Detected table on page {page_num} at {table['bbox']}")
+
+                except Exception as e:
+                    logger.error(f"Failed to process table on page {page_num}: {e}")
 
     def ingest_directory(self, directory_path: str):
         """Ingest all supported files from a directory"""

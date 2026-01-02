@@ -24,16 +24,16 @@ public class OllamaService
         var request = new OllamaEmbeddingRequest
         {
             Model = model!,
-            Prompt = text
+            Input = text
         };
 
         try
         {
-            var response = await _httpClient.PostAsJsonAsync($"{_baseUrl}/api/embeddings", request);
+            var response = await _httpClient.PostAsJsonAsync($"{_baseUrl}/api/embed", request);
             response.EnsureSuccessStatusCode();
 
             var result = await response.Content.ReadFromJsonAsync<OllamaEmbeddingResponse>();
-            return result?.Embedding ?? Array.Empty<float>();
+            return result?.Embeddings?.FirstOrDefault() ?? Array.Empty<float>();
         }
         catch (Exception ex)
         {

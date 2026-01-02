@@ -18,8 +18,10 @@ public class VectorSearchService
 
     public virtual async Task<List<SearchResult>> SearchAsync(float[] queryEmbedding, int topK = 5, string? contentType = null)
     {
-        await using var conn = new NpgsqlConnection(_connectionString);
-        await conn.OpenAsync();
+        var dataSourceBuilder = new NpgsqlDataSourceBuilder(_connectionString);
+        dataSourceBuilder.UseVector();
+        await using var dataSource = dataSourceBuilder.Build();
+        await using var conn = await dataSource.OpenConnectionAsync();
 
         var results = new List<SearchResult>();
         var vector = new Vector(queryEmbedding);
@@ -29,7 +31,7 @@ public class VectorSearchService
         if (!string.IsNullOrEmpty(contentType))
         {
             cmd = new NpgsqlCommand(@"
-                SELECT id, content, metadata::text, content_type, 
+                SELECT id, content, metadata::text, content_type,
                        embedding <=> $1 as distance
                 FROM documents
                 WHERE content_type = $3
@@ -42,7 +44,7 @@ public class VectorSearchService
         else
         {
             cmd = new NpgsqlCommand(@"
-                SELECT id, content, metadata::text, content_type, 
+                SELECT id, content, metadata::text, content_type,
                        embedding <=> $1 as distance
                 FROM documents
                 ORDER BY embedding <=> $1
@@ -70,8 +72,10 @@ public class VectorSearchService
 
     public async Task<object> GetStatsAsync()
     {
-        await using var conn = new NpgsqlConnection(_connectionString);
-        await conn.OpenAsync();
+        var dataSourceBuilder = new NpgsqlDataSourceBuilder(_connectionString);
+        dataSourceBuilder.UseVector();
+        await using var dataSource = dataSourceBuilder.Build();
+        await using var conn = await dataSource.OpenConnectionAsync();
 
         var stats = new Dictionary<string, object>();
 

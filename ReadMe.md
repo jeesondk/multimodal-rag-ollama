@@ -132,3 +132,41 @@ curl -X POST http://localhost:5000/api/rag/search \
 # Get stats
 curl http://localhost:5000/api/rag/stats
 ```
+
+## Connecting Open WebUI to RAG System
+
+### Option 1: Using Functions (Recommended)
+
+1. Access Open WebUI at http://localhost:3000
+2. Go to **Workspace** → **Functions**
+3. Click **+ Create New Function**
+4. Copy the contents of `open-webui-function/rag_function.py`
+5. Save and enable the function
+
+Usage in chat:
+```
+@search_documents "What is machine learning?"
+```
+
+### Option 2: Direct API Integration
+
+The Open WebUI container is configured to access your .NET API at:
+```
+http://host.docker.internal:5000/api/rag
+```
+
+You can test the connection:
+```bash
+docker exec -it open-webui curl http://host.docker.internal:5000/api/rag/health
+```
+
+### Option 3: Ollama-Compatible Endpoint
+
+Your .NET API exposes an Ollama-compatible endpoint at `/v1/chat/completions`.
+
+In Open WebUI:
+1. Settings → Connections
+2. Add custom endpoint: `http://host.docker.internal:5000/v1`
+3. Select the model in chat
+
+This makes every query automatically use RAG!

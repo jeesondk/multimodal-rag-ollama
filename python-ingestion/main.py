@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 def setup_database():
     """Initialize database schema"""
     logger.info("Setting up database...")
-    db = Database()
+    db = Database(register_vector_type=False)
     db.setup()
     db.close()
     logger.info("Database setup complete!")

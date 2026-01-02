@@ -9,15 +9,17 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 logger = logging.getLogger(__name__)
 
 class Database:
-    def __init__(self):
+    def __init__(self, register_vector_type=True):
         self.conn = None
+        self.register_vector_type = register_vector_type
         self.connect()
 
     def connect(self):
         """Establish database connection"""
         try:
             self.conn = psycopg2.connect(**config.db_config)
-            register_vector(self.conn)
+            if self.register_vector_type:
+                register_vector(self.conn)
             logger.info("Database connection established")
         except psycopg2.Error as e:
             logger.error(f"Failed to connect to database: {e}")
@@ -28,6 +30,9 @@ class Database:
         with self.conn.cursor() as cur:
             # Enable pgvector extension
             cur.execute("CREATE EXTENSION IF NOT EXISTS vector;")
+
+            # Now register the vector type after creating the extension
+            register_vector(self.conn)
 
             # Create documents table
             cur.execute(f"""
