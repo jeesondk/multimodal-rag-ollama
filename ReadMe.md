@@ -841,33 +841,10 @@ While not required, attribution is appreciated. If you use this solution in your
 - This repository and its contributors
 - The technologies listed in the Acknowledgments section
 
-## Contributing
-
-Contributions are welcome! This project was built with the goal of being a practical, production-ready RAG solution.
-
-### How to Contribute
-
-1. **Bug Reports**: Open an issue describing the bug and steps to reproduce
-2. **Feature Requests**: Share your ideas for improvements or new features
-3. **Code Contributions**:
-   - Fork the repository
-   - Create a feature branch
-   - Make your changes with clear commit messages
-   - Submit a pull request with a description of your changes
-
-### Areas for Contribution
-
-- Additional document processors (Word, Excel, etc.)
-- Performance optimizations
-- Additional pipeline configurations
-- Enhanced error handling and monitoring
-- Documentation improvements
-- Test coverage expansion
-
-All contributions will be reviewed and acknowledged.
+---
 
 ## Support
 
-For issues and questions:
-- GitHub Issues: [your-repo-url/issues]
-- Documentation: [link to wiki/docs]
+This project is provided as-is with **no official support**. You are welcome to fork, modify, and adapt it to your needs.
+
+For community discussion and sharing experiences, you may use the GitHub issues or discussions, but no guaranteed responses or support will be provided.
